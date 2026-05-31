@@ -1018,6 +1018,28 @@ def generate_dashboard(csv_path, output_dir=None):
     return output_path
 
 
+def find_csv_file():
+    """Search common locations for the HRRP CSV data file."""
+    possible_paths = [
+        "Hospitals_Readmissions_Reduction_Program_ready.csv",
+        os.path.join("data", "Hospitals_Readmissions_Reduction_Program_ready.csv"),
+        os.path.join(os.path.dirname(__file__), "Hospitals_Readmissions_Reduction_Program_ready.csv"),
+    ]
+    for path in possible_paths:
+        if os.path.exists(path):
+            return path
+    # Walk current directory
+    for root, dirs, files in os.walk("."):
+        for file in files:
+            if file == "Hospitals_Readmissions_Reduction_Program_ready.csv":
+                return os.path.join(root, file)
+    return None
+
+
 if __name__ == "__main__":
-    input_csv = r"C:\Users\31798\Desktop\毕业论文\data and code\Hospitals_Readmissions_Reduction_Program_ready.csv"
-    generate_dashboard(input_csv)
+    csv_file = find_csv_file()
+    if csv_file is None:
+        print("Error: Could not find 'Hospitals_Readmissions_Reduction_Program_ready.csv'.")
+        print("Please run:  python download_data.py  first, or place the CSV in this directory.")
+    else:
+        generate_dashboard(csv_file)

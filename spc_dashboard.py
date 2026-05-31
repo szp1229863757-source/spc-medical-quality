@@ -738,11 +738,11 @@ def run_pipeline(csv_path):
     print(f"\nSuccess! Dashboard generated at:\n{os.path.join(output_dir, 'index.html')}")
 
 def find_csv_file():
+    """Search common locations for the HRRP CSV data file."""
     possible_paths = [
         "Hospitals_Readmissions_Reduction_Program_ready.csv",
         os.path.join("data", "Hospitals_Readmissions_Reduction_Program_ready.csv"),
-        os.path.join(os.path.expanduser("~"), "Desktop", "毕业论文", "data", "Hospitals_Readmissions_Reduction_Program_ready.csv"),
-        os.path.join(os.path.expanduser("~"), "Desktop", "Hospitals_Readmissions_Reduction_Program_ready.csv"),
+        os.path.join(os.path.dirname(__file__), "Hospitals_Readmissions_Reduction_Program_ready.csv"),
     ]
     for path in possible_paths:
         if os.path.exists(path):
@@ -753,9 +753,11 @@ def find_csv_file():
                 return os.path.join(root, file)
     return None
 
+
 if __name__ == "__main__":
     csv_file = find_csv_file()
     if csv_file is None:
-        print("Error: Could not find the required CSV file. Please ensure 'Hospitals_Readmissions_Reduction_Program_ready.csv' is in the current directory or in ./data/ or on your Desktop.")
+        print("Error: Could not find 'Hospitals_Readmissions_Reduction_Program_ready.csv'.")
+        print("Please run:  python download_data.py  first, or place the CSV in this directory.")
     else:
         run_pipeline(csv_file)
